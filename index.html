@@ -1,10 +1,654 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>欢迎来到我的主页</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Personal Homepage</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-green: #a8d5ba;
+            --light-green: #e8f5e9;
+            --dark-green: #6b9e78;
+            --text-dark: #2c3e50;
+            --text-light: #555;
+            --bg-white: #ffffff;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--text-dark);
+            background-color: var(--bg-white);
+        }
+
+        /* Navigation */
+        nav {
+            background-color: var(--bg-white);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+
+        nav.scrolled {
+            background-color: rgba(255, 255, 255, 0.95);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--dark-green);
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-dark);
+            font-weight: 500;
+            transition: color 0.3s ease;
+            position: relative;
+        }
+
+        .nav-links a:hover {
+            color: var(--dark-green);
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background-color: var(--primary-green);
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        /* Sections */
+        section {
+            padding: 5rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        section:nth-child(even) {
+            background-color: var(--light-green);
+        }
+
+        h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            color: var(--dark-green);
+        }
+
+        h2 {
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+            color: var(--dark-green);
+            border-bottom: 3px solid var(--primary-green);
+            padding-bottom: 0.5rem;
+            display: inline-block;
+        }
+
+        h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: var(--dark-green);
+        }
+
+        p {
+            margin-bottom: 1rem;
+            color: var(--text-light);
+            font-size: 1.1rem;
+        }
+
+        /* Home Section */
+        #home {
+            background: linear-gradient(135deg, var(--light-green) 0%, var(--bg-white) 100%);
+            text-align: center;
+        }
+
+        .home-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .profile-image {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            background-color: var(--primary-green);
+            margin: 0 auto 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+            color: var(--bg-white);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .social-links {
+            margin-top: 2rem;
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+        }
+
+        .social-links a {
+            display: inline-block;
+            padding: 0.5rem 1.5rem;
+            background-color: var(--primary-green);
+            color: var(--bg-white);
+            text-decoration: none;
+            border-radius: 25px;
+            transition: all 0.3s ease;
+        }
+
+        .social-links a:hover {
+            background-color: var(--dark-green);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        /* Service Section */
+        .service-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .service-card {
+            background-color: var(--bg-white);
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .service-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+        }
+
+        .service-icon {
+            width: 60px;
+            height: 60px;
+            background-color: var(--light-green);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+
+        /* Projects Section */
+        .project-item {
+            background-color: var(--bg-white);
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border-radius: 10px;
+            border-left: 5px solid var(--primary-green);
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+
+        .project-item:hover {
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+            transform: translateX(5px);
+        }
+
+        .project-meta {
+            color: var(--dark-green);
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        /* News Section */
+        .news-list {
+            list-style: none;
+        }
+
+        .news-item {
+            background-color: var(--bg-white);
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            border-radius: 10px;
+            border-left: 4px solid var(--primary-green);
+            box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+            transition: all 0.3s ease;
+        }
+
+        .news-item:hover {
+            box-shadow: 0 6px 15px rgba(0,0,0,0.12);
+        }
+
+        .news-date {
+            color: var(--dark-green);
+            font-weight: 600;
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+
+        /* Publications Section */
+        .publication-item {
+            background-color: var(--bg-white);
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            border-radius: 10px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+            transition: all 0.3s ease;
+        }
+
+        .publication-item:hover {
+            box-shadow: 0 6px 15px rgba(0,0,0,0.12);
+        }
+
+        .publication-title {
+            font-weight: 600;
+            color: var(--dark-green);
+            margin-bottom: 0.5rem;
+        }
+
+        .publication-authors {
+            font-style: italic;
+            color: var(--text-light);
+            margin-bottom: 0.5rem;
+        }
+
+        .publication-venue {
+            color: var(--text-dark);
+            font-weight: 500;
+        }
+
+        /* Awards Section */
+        .award-item {
+            background-color: var(--bg-white);
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            border-radius: 10px;
+            border-left: 5px solid var(--primary-green);
+            box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .award-item:hover {
+            box-shadow: 0 6px 15px rgba(0,0,0,0.12);
+            transform: translateX(5px);
+        }
+
+        .award-icon {
+            width: 60px;
+            height: 60px;
+            background-color: var(--light-green);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            flex-shrink: 0;
+        }
+
+        .award-content h3 {
+            margin-bottom: 0.5rem;
+        }
+
+        .award-year {
+            color: var(--dark-green);
+            font-weight: 600;
+        }
+
+        /* CV Section */
+        .cv-section {
+            margin-bottom: 3rem;
+        }
+
+        .cv-item {
+            margin-bottom: 2rem;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid var(--primary-green);
+        }
+
+        .cv-item:last-child {
+            border-bottom: none;
+        }
+
+        .cv-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            margin-bottom: 0.5rem;
+        }
+
+        .cv-title {
+            font-weight: 600;
+            color: var(--dark-green);
+            font-size: 1.2rem;
+        }
+
+        .cv-date {
+            color: var(--text-light);
+            font-weight: 500;
+        }
+
+        .cv-subtitle {
+            color: var(--text-dark);
+            margin-bottom: 0.5rem;
+        }
+
+        .download-cv {
+            display: inline-block;
+            padding: 1rem 2rem;
+            background-color: var(--primary-green);
+            color: var(--bg-white);
+            text-decoration: none;
+            border-radius: 30px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            margin-top: 2rem;
+        }
+
+        .download-cv:hover {
+            background-color: var(--dark-green);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-links {
+                gap: 1rem;
+                font-size: 0.9rem;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+
+            h2 {
+                font-size: 1.8rem;
+            }
+
+            section {
+                padding: 3rem 1rem;
+            }
+
+            .service-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .award-item {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .cv-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+        }
+
+        /* Smooth scrolling */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* Section spacing */
+        section {
+            scroll-margin-top: 80px;
+        }
+    </style>
 </head>
 <body>
-    <h1>你好，我是 Xpeng Zhang</h1>
-    <p>这是我的 GitHub 主页！</p>
+    <!-- Navigation -->
+    <nav id="navbar">
+        <div class="nav-container">
+            <div class="logo">Xiaopeng Zhang</div>
+            <ul class="nav-links">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#service">Service</a></li>
+                <li><a href="#projects">Projects</a></li>
+                <li><a href="#news">News</a></li>
+                <li><a href="#publications">Publications</a></li>
+                <li><a href="#awards">Awards</a></li>
+                <li><a href="#cv">CV</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Home Section -->
+    <section id="home">
+        <div class="home-content">
+            <div class="profile-image">👤</div>
+            <h1>Xiaopeng Zhang</h1>
+            <p style="font-size: 1.3rem; color: var(--dark-green); font-weight: 500;">Research Scientist | AI & Machine Learning Expert</p>
+            <p>Welcome to my personal homepage. Now I am a master student in data science, University of Chicago. My work focuses on the generative model and robotics.</p>
+            <div class="social-links">
+                <a href="mailto:xpengzhang0302@uchicago.edu">Email</a>
+                <a href="#">LinkedIn</a>
+                <a href="#">Google Scholar</a>
+                <a href="https://github.com/xpenguchi">GitHub</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Service Section -->
+    <section id="service">
+        <h2>Service</h2>
+        <div class="service-grid">
+            <div class="service-card">
+                <div class="service-icon">📝</div>
+                <h3>Volunteer</h3>
+                <p><a href="https://southsidescience.event.uchicago.edu/">South Side Science Festival</a> of <a href="https://ttic.edu/ripl/">RIPL lab</a></p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Projects Section -->
+    <section id="projects">
+        <h2>Projects</h2>
+        <div class="project-item">
+            <div class="project-meta">2025 - Present | One of Principal Investigators</div>
+            <h3>StackGen's 3D extension</h3>
+            <p>Doing a research on using diffusion model to stack the 3D structures to match the silhouettes, and the dataset is generated by our graph neural network.</p>
+        </div>
+    </section>
+
+    <!-- News Section -->
+    <section id="news">
+        <h2>News</h2>
+        <ul class="news-list">
+            <li class="news-item">
+                <div class="news-date">Sep 2024</div>
+                <p>I started my new master career!</p>
+            </li>
+        </ul>
+    </section>
+
+    <!-- Publications Section -->
+    <section id="publications">
+        <h2>Publications</h2>
+
+    </section>
+
+    <!-- Awards Section -->
+    <section id="awards">
+        <h2>Awards</h2>
+        <div class="award-item">
+            <div class="award-icon">🏆</div>
+            <div class="award-content">
+                <h3>Outstanding Research Award</h3>
+                <p class="award-year">2024</p>
+                <p>AI Research Institute - Recognized for exceptional contributions to explainable artificial intelligence and its applications in healthcare.</p>
+            </div>
+        </div>
+        <div class="award-item">
+            <div class="award-icon">🏆</div>
+            <div class="award-content">
+                <h3>Best Paper Award</h3>
+                <p class="award-year">2023</p>
+                <p>IEEE Conference on Computer Vision and Pattern Recognition (CVPR) - For groundbreaking work on multi-modal fusion in autonomous driving systems.</p>
+            </div>
+        </div>
+        <div class="award-item">
+            <div class="award-icon">🏆</div>
+            <div class="award-content">
+                <h3>Early Career Research Excellence Award</h3>
+                <p class="award-year">2022</p>
+                <p>National Science Foundation - Awarded to promising early-career researchers demonstrating outstanding potential in artificial intelligence research.</p>
+            </div>
+        </div>
+        <div class="award-item">
+            <div class="award-icon">🏆</div>
+            <div class="award-content">
+                <h3>Graduate Research Fellowship</h3>
+                <p class="award-year">2018</p>
+                <p>National Science Foundation - Competitive fellowship supporting graduate research in machine learning and computer vision.</p>
+            </div>
+        </div>
+        <div class="award-item">
+            <div class="award-icon">🏆</div>
+            <div class="award-content">
+                <h3>Outstanding Thesis Award</h3>
+                <p class="award-year">2020</p>
+                <p>University Department of Computer Science - Recognized for exceptional doctoral dissertation on adversarial robustness in deep learning.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- CV Section -->
+    <section id="cv">
+        <h2>Curriculum Vitae</h2>
+        
+        <div class="cv-section">
+            <h3>Education</h3>
+            <div class="cv-item">
+                <div class="cv-header">
+                    <div class="cv-title">Ph.D. in Computer Science</div>
+                    <div class="cv-date">2016 - 2020</div>
+                </div>
+                <div class="cv-subtitle">Stanford University, California, USA</div>
+                <p>Dissertation: "Adversarial Robustness and Explainability in Deep Neural Networks"<br>
+                Advisor: Prof. Andrew Thompson</p>
+            </div>
+            <div class="cv-item">
+                <div class="cv-header">
+                    <div class="cv-title">M.S. in Artificial Intelligence</div>
+                    <div class="cv-date">2014 - 2016</div>
+                </div>
+                <div class="cv-subtitle">Massachusetts Institute of Technology, Massachusetts, USA</div>
+                <p>Thesis: "Deep Learning Approaches for Computer Vision"</p>
+            </div>
+            <div class="cv-item">
+                <div class="cv-header">
+                    <div class="cv-title">B.S. in Computer Science</div>
+                    <div class="cv-date">2010 - 2014</div>
+                </div>
+                <div class="cv-subtitle">University of California, Berkeley, California, USA</div>
+                <p>Graduated with Highest Honors | GPA: 3.95/4.0</p>
+            </div>
+        </div>
+
+        <div class="cv-section">
+            <h3>Professional Experience</h3>
+            <div class="cv-item">
+                <div class="cv-header">
+                    <div class="cv-title">Associate Professor</div>
+                    <div class="cv-date">2023 - Present</div>
+                </div>
+                <div class="cv-subtitle">Department of Computer Science, Research University</div>
+                <p>Leading research group focused on machine learning, computer vision, and AI applications. Teaching graduate and undergraduate courses in deep learning and artificial intelligence.</p>
+            </div>
+            <div class="cv-item">
+                <div class="cv-header">
+                    <div class="cv-title">Assistant Professor</div>
+                    <div class="cv-date">2020 - 2023</div>
+                </div>
+                <div class="cv-subtitle">Department of Computer Science, Research University</div>
+                <p>Established independent research program in machine learning and AI. Secured over $2 million in research funding from NSF, NIH, and industry partners.</p>
+            </div>
+            <div class="cv-item">
+                <div class="cv-header">
+                    <div class="cv-title">Research Intern</div>
+                    <div class="cv-date">Summer 2019</div>
+                </div>
+                <div class="cv-subtitle">Google AI Research, Mountain View, California</div>
+                <p>Worked on neural architecture search and efficient deep learning models for mobile devices. Contributed to open-source projects and published research findings.</p>
+            </div>
+        </div>
+
+        <div class="cv-section">
+            <h3>Skills</h3>
+            <div class="cv-item">
+                <p><strong>Programming Languages:</strong> Python, C++, Java, MATLAB, R</p>
+                <p><strong>Machine Learning Frameworks:</strong> PyTorch, TensorFlow, Keras, scikit-learn</p>
+                <p><strong>Research Areas:</strong> Deep Learning, Computer Vision, Natural Language Processing, Reinforcement Learning, Explainable AI</p>
+                <p><strong>Tools & Technologies:</strong> Git, Docker, Kubernetes, AWS, Google Cloud Platform</p>
+            </div>
+        </div>
+
+        <a href="#" class="download-cv">Download Full CV (PDF)</a>
+    </section>
+
+    <script>
+        // Navbar scroll effect
+        window.addEventListener('scroll', function() {
+            const navbar = document.getElementById('navbar');
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+    </script>
 </body>
 </html>
+
