@@ -155,9 +155,15 @@
             font-size: 4rem;
             color: var(--bg-white);
             box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-            object-fit: cover;
-            border-radius: 50%;
-            display: block;  
+            overflow: hidden; /* ensure the inner image is clipped to the circle */
+        }
+
+        /* Ensure the img fills the circle and is cropped appropriately */
+        .profile-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover; /* crop while preserving aspect ratio */
+            display: block;
         }
 
         .social-links {
